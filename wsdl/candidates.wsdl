@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="CandidateService"
+  targetNamespace="http://example.com/candidates"
+  xmlns:tns="http://example.com/candidates"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://example.com/candidates" elementFormDefault="qualified">
+      <!-- Tipos -->
+      <xsd:complexType name="Candidate">
+        <xsd:sequence>
+          <xsd:element name="id" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="email" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="CandidateList">
+        <xsd:sequence>
+          <xsd:element name="candidate" type="tns:Candidate" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <!-- Requests / Responses -->
+      <xsd:element name="CreateCandidateRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="id" type="xsd:string"/>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="email" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="CreateCandidateResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="candidate" type="tns:Candidate"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="AddSkillToCandidateRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="candidateId" type="xsd:string"/>
+            <xsd:element name="skillName" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="AddSkillToCandidateResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="status" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="FindCandidatesBySkillRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="skillName" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="FindCandidatesBySkillResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="candidates" type="tns:CandidateList"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+
+  <!-- Mensajes -->
+  <wsdl:message name="CreateCandidateRequest">
+    <wsdl:part name="parameters" element="tns:CreateCandidateRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CreateCandidateResponse">
+    <wsdl:part name="parameters" element="tns:CreateCandidateResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="AddSkillToCandidateRequest">
+    <wsdl:part name="parameters" element="tns:AddSkillToCandidateRequest"/>
+  </wsdl:message>
+  <wsdl:message name="AddSkillToCandidateResponse">
+    <wsdl:part name="parameters" element="tns:AddSkillToCandidateResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="FindCandidatesBySkillRequest">
+    <wsdl:part name="parameters" element="tns:FindCandidatesBySkillRequest"/>
+  </wsdl:message>
+  <wsdl:message name="FindCandidatesBySkillResponse">
+    <wsdl:part name="parameters" element="tns:FindCandidatesBySkillResponse"/>
+  </wsdl:message>
+
+  <!-- PortType -->
+  <wsdl:portType name="CandidatePortType">
+    <wsdl:operation name="CreateCandidate">
+      <wsdl:input message="tns:CreateCandidateRequest"/>
+      <wsdl:output message="tns:CreateCandidateResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="AddSkillToCandidate">
+      <wsdl:input message="tns:AddSkillToCandidateRequest"/>
+      <wsdl:output message="tns:AddSkillToCandidateResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="FindCandidatesBySkill">
+      <wsdl:input message="tns:FindCandidatesBySkillRequest"/>
+      <wsdl:output message="tns:FindCandidatesBySkillResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- Binding -->
+  <wsdl:binding name="CandidateBinding" type="tns:CandidatePortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="CreateCandidate">
+      <soap:operation soapAction="http://example.com/candidates/CreateCandidate"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSkillToCandidate">
+      <soap:operation soapAction="http://example.com/candidates/AddSkillToCandidate"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindCandidatesBySkill">
+      <soap:operation soapAction="http://example.com/candidates/FindCandidatesBySkill"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- Service -->
+  <wsdl:service name="CandidateService">
+    <wsdl:port name="CandidatePort" binding="tns:CandidateBinding">
+      <soap:address location="http://localhost:3000/soap/candidates"/>
+    </wsdl:port>
+  </wsdl:service>
+</definitions>

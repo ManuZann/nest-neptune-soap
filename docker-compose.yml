@@ -1,0 +1,10 @@
+services:
+  gremlin:
+    image: tinkerpop/gremlin-server:3.6.5
+    ports:
+      - "8182:8182"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8182"]
+      interval: 10s
+      timeout: 3s
+      retries: 12

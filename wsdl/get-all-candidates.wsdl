@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="GetAllCandidatesService"
+  targetNamespace="http://example.com/getallcandidates"
+  xmlns:tns="http://example.com/getallcandidates"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://example.com/getallcandidates" elementFormDefault="qualified">
+      <!-- Tipos -->
+      <xsd:complexType name="Candidate">
+        <xsd:sequence>
+          <xsd:element name="id" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="email" type="xsd:string"/>
+          <xsd:element name="skills" type="tns:SkillList" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="Skill">
+        <xsd:sequence>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="level" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SkillList">
+        <xsd:sequence>
+          <xsd:element name="skill" type="tns:Skill" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="CandidateList">
+        <xsd:sequence>
+          <xsd:element name="candidate" type="tns:Candidate" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <!-- Requests / Responses -->
+      <xsd:element name="GetAllCandidatesRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <!-- Sin parámetros, obtiene todos los candidatos -->
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="GetAllCandidatesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="candidates" type="tns:CandidateList"/>
+            <xsd:element name="totalCount" type="xsd:integer"/>
+            <xsd:element name="status" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+
+  <!-- Mensajes -->
+  <wsdl:message name="GetAllCandidatesRequest">
+    <wsdl:part name="parameters" element="tns:GetAllCandidatesRequest"/>
+  </wsdl:message>
+  <wsdl:message name="GetAllCandidatesResponse">
+    <wsdl:part name="parameters" element="tns:GetAllCandidatesResponse"/>
+  </wsdl:message>
+
+  <!-- PortType -->
+  <wsdl:portType name="GetAllCandidatesPortType">
+    <wsdl:operation name="GetAllCandidates">
+      <wsdl:input message="tns:GetAllCandidatesRequest"/>
+      <wsdl:output message="tns:GetAllCandidatesResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- Binding -->
+  <wsdl:binding name="GetAllCandidatesBinding" type="tns:GetAllCandidatesPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="GetAllCandidates">
+      <soap:operation soapAction="http://example.com/getallcandidates/GetAllCandidates"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- Service -->
+  <wsdl:service name="GetAllCandidatesService">
+    <wsdl:port name="GetAllCandidatesPort" binding="tns:GetAllCandidatesBinding">
+      <soap:address location="http://localhost:3000/soap/get-all-candidates"/>
+    </wsdl:port>
+  </wsdl:service>
+</definitions>
+
